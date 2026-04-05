@@ -37,5 +37,10 @@ cnn = ["torch>=2.3"]
 [project.scripts]
 mep = "mutation_effect_prediction.cli:main"
 
+[project.urls]
+Homepage = "https://github.com/Azimml/mutation-effect-prediction"
+Repository = "https://github.com/Azimml/mutation-effect-prediction"
+Issues = "https://github.com/Azimml/mutation-effect-prediction/issues"
+
 [tool.setuptools.packages.find]
 where = ["src"]
