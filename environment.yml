@@ -1,0 +1,18 @@
+name: mutation-effect-prediction
+channels:
+  - pytorch
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.12
+  - pip
+  - numpy
+  - pandas
+  - scikit-learn
+  - pysam
+  - samtools
+  - bcftools
+  - matplotlib
+  - seaborn
+  - cpuonly
+  - pytorch

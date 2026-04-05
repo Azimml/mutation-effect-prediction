@@ -1,0 +1,28 @@
+{
+  "baseline_50k": {
+    "test_auroc": 0.4771937812711779,
+    "test_average_precision": 0.08219649215362138,
+    "test_f1": 0.12623664424218442
+  },
+  "cnn_50k": {
+    "val_auroc": 0.7702217993855742,
+    "test_auroc": 0.7502126800570992,
+    "test_average_precision": 0.26127082702675575,
+    "test_f1": 0.2832189644416719,
+    "best_epoch": 4,
+    "selected_threshold": 0.6741797924041748
+  },
+  "cnn_full_70c": {
+    "train_auroc": 0.945663335187169,
+    "train_average_precision": 0.7524745079121947,
+    "train_f1": 0.685922809496664,
+    "val_auroc": 0.8857134037894655,
+    "val_average_precision": 0.5940515737698489,
+    "val_f1": 0.5603790676607902,
+    "test_auroc": 0.8829418503064851,
+    "test_average_precision": 0.6091627262616066,
+    "test_f1": 0.5701777976990886,
+    "best_epoch": 3,
+    "selected_threshold": 0.8138390183448792
+  }
+}

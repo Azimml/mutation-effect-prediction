@@ -1,0 +1,41 @@
+[data]
+clinvar_vcf_url = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz"
+clinvar_tbi_url = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi"
+reference_fasta_url = "https://ftp.ensembl.org/pub/current_fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz"
+
+[preprocessing]
+window_radius = 100
+region_bin_size = 1000000
+validation_fraction = 0.10
+test_fraction = 0.20
+seed = 17
+allowed_review_statuses = [
+  "criteria_provided,_single_submitter",
+  "criteria_provided,_multiple_submitters,_no_conflicts",
+  "reviewed_by_expert_panel",
+  "practice_guideline",
+]
+allowed_chromosomes = [
+  "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11",
+  "12", "13", "14", "15", "16", "17", "18", "19", "20", "21",
+  "22", "X", "Y",
+]
+
+[baseline]
+kmer_size = 3
+max_features = 200000
+max_iter = 1000
+class_weight = "balanced"
+
+[cnn]
+batch_size = 128
+epochs = 6
+learning_rate = 0.001
+weight_decay = 0.0001
+dropout = 0.20
+hidden_dim = 128
+early_stopping_patience = 2
+max_temperature_c = 65
+cooldown_temperature_c = 58
+temperature_check_interval_batches = 1
+batch_sleep_seconds = 0.03

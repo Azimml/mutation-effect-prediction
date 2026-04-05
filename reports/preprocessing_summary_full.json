@@ -1,0 +1,20 @@
+{
+  "kept_records": 1413909,
+  "label_counts": {
+    "benign": 1249484,
+    "pathogenic": 164425
+  },
+  "skipped_invalid_bases": 35,
+  "skipped_missing_label": 2631795,
+  "skipped_multiallelic": 1100,
+  "skipped_non_canonical_chromosome": 3170,
+  "skipped_non_snv": 297386,
+  "skipped_reference_mismatch": 0,
+  "skipped_review_status": 51442,
+  "split_counts": {
+    "test": 281218,
+    "train": 1000502,
+    "val": 132189
+  },
+  "total_records": 4398837
+}

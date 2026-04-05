@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mutation-effect-prediction"
+version = "0.1.0"
+description = "Leakage-aware ClinVar SNV pathogenicity prediction pipeline."
+readme = "README.md"
+requires-python = ">=3.11"
+license = {file = "LICENSE"}
+authors = [
+  {name = "Azim"}
+]
+keywords = ["genomics", "machine-learning", "clinvar", "dna", "pytorch", "bioinformatics"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+  "matplotlib>=3.8",
+  "numpy>=1.26",
+  "pandas>=2.2",
+  "pysam>=0.22",
+  "scikit-learn>=1.5",
+  "seaborn>=0.13",
+]
+
+[project.optional-dependencies]
+cnn = ["torch>=2.3"]
+
+[project.scripts]
+mep = "mutation_effect_prediction.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
