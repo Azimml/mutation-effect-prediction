@@ -1,0 +1,15 @@
+# Normalize line endings to LF in the repository, checked out per-platform.
+* text=auto eol=lf
+
+# Binary artifacts should never be line-ending normalized or diffed as text.
+*.png binary
+*.pt binary
+*.pkl binary
+*.gz binary
+*.fa binary
+*.fai binary
+*.tbi binary
+
+# Keep GitHub's language stats focused on the actual source, not configs.
+configs/*.toml linguist-language=TOML
+*.md linguist-documentation
