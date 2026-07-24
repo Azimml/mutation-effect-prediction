@@ -273,6 +273,31 @@ python scripts/run_smoke_test.py
 
 Artifacts land in `data/interim/smoke/`.
 
+## Development
+
+Install the dev extras and run the same checks CI runs:
+
+```bash
+pip install -e ".[dev]"
+ruff check src tests
+pytest
+```
+
+A `Makefile` wraps the common tasks:
+
+```bash
+make install-dev   # editable install with ruff + pytest
+make lint          # ruff check src tests
+make test          # pytest
+make smoke         # end-to-end synthetic run
+```
+
+The pure-function tests need neither `torch`, `pysam`, the network, nor any
+data files; the sequence-encoding tests are skipped automatically when `torch`
+is not installed. Check the installed version with `mep --version`. See
+[CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow and [CHANGELOG.md](CHANGELOG.md)
+for release notes.
+
 ## Recommended Next Step
 
 The strongest next step is not automatically a transformer. For this repo, the best sequence is:
