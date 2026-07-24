@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import os
 import math
+import os
 import time
 from pathlib import Path
 
@@ -20,7 +20,6 @@ from .evaluation import (
 )
 from .runtime import query_gpu_temperature_c, resolve_device
 from .utils import ensure_directory, set_seed, write_json
-
 
 BASE_TO_INDEX = {"A": 0, "C": 1, "G": 2, "T": 3}
 
@@ -425,7 +424,10 @@ def save_checkpoint(
 
 
 def load_cnn_checkpoint(path: str | Path, map_location: str | torch.device) -> dict[str, object]:
-    return torch.load(Path(path), map_location=map_location)
+    # weights_only=True refuses to unpickle arbitrary objects (an RCE vector on
+    # untrusted checkpoints; the torch>=2.6 default). Our payload is only
+    # tensors + plain dict/float/int/list, so this is safe and future-proof.
+    return torch.load(Path(path), map_location=map_location, weights_only=True)
 
 
 def validate_split_frame(dataframe: pd.DataFrame, split_name: str) -> None:
