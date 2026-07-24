@@ -1,5 +1,9 @@
 # Mutation Effect Prediction
 
+[![CI](https://github.com/Azimml/mutation-effect-prediction/actions/workflows/ci.yml/badge.svg)](https://github.com/Azimml/mutation-effect-prediction/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 Leakage-aware `ClinVar` SNV pathogenicity prediction using official `ClinVar GRCh38` calls and `GRCh38` reference sequence context.
 
 This repository is a reproducible genomics ML prototype, not a clinical tool. It focuses on a defensible first task: binary pathogenic vs benign classification for single-nucleotide variants using local sequence context.
