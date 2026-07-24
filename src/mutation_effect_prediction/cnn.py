@@ -1,3 +1,14 @@
+"""Sequence-pair 1D CNN over reference/alternate windows.
+
+Each variant is encoded as a 9-channel tensor: a 4-channel one-hot of the
+reference window, a 4-channel one-hot of the alternate window, and a 1-channel
+mask marking the mutated center position. A convolutional encoder produces
+center, max-pooled, and mean-pooled features that are concatenated and passed
+to a small classifier head.
+
+``torch`` is only imported at module scope here because this module is the CNN
+path; the pure helpers used elsewhere live in modules that stay torch-free.
+"""
 from __future__ import annotations
 
 import math
@@ -261,6 +272,13 @@ def predict_with_cnn(
     output_csv_path: str | Path,
     device_preference: str = "auto",
 ) -> Path:
+    """Score a CSV of sequence windows with a trained CNN checkpoint.
+
+    The input must contain ``ref_seq`` and ``alt_seq``. Predicted labels use
+    the validation-selected threshold stored in the checkpoint (falling back to
+    0.5 if absent). Writes the input rows plus ``predicted_probability`` and
+    ``predicted_label`` to ``output_csv_path`` and returns that path.
+    """
     dataframe = read_dataset_csv(input_csv_path)
     require_columns(dataframe, ("ref_seq", "alt_seq"), input_csv_path)
     dataset = SequencePairDataset(dataframe.assign(label=0))
@@ -298,6 +316,13 @@ def save_saliency_plot(
     output_path: str | Path,
     device_preference: str = "auto",
 ) -> Path:
+    """Save an input-gradient saliency plot for a single variant.
+
+    Looks up ``variant_id`` in the CSV, backpropagates the logit to the input
+    tensor, and plots the per-position absolute gradient (summed over the ref
+    and alt one-hot channels) with the mutation center marked. Returns the
+    written image path; raises ``ValueError`` if the variant is not found.
+    """
     dataframe = read_dataset_csv(input_csv_path)
     selected = dataframe[dataframe["variant_id"] == variant_id]
     if selected.empty:
@@ -339,6 +364,13 @@ def save_saliency_plot(
 
 
 def encode_sequence_pair(reference_sequence: str, alternate_sequence: str) -> torch.Tensor:
+    """Build the 9-channel model input for one variant.
+
+    Channels 0-3 are the reference one-hot, 4-7 the alternate one-hot, and
+    channel 8 is a mutation mask with a single 1 at the center position. Both
+    sequences must have the same length. Unknown bases (e.g. ``N``) become
+    all-zero columns.
+    """
     ref_encoded = one_hot_encode(reference_sequence)
     alt_encoded = one_hot_encode(alternate_sequence)
     mutation_mask = np.zeros((1, len(reference_sequence)), dtype=np.float32)
