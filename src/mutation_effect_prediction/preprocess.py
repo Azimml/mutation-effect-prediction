@@ -4,11 +4,13 @@ import csv
 import gzip
 import re
 from collections import Counter
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Iterable
+from typing import TYPE_CHECKING
 
-import pysam
+if TYPE_CHECKING:
+    import pysam
 
 from .constants import (
     BENIGN_TERMS,
@@ -17,7 +19,6 @@ from .constants import (
     VALID_BASES,
 )
 from .utils import ensure_directory, stable_fraction, write_json
-
 
 TOKEN_SPLIT_PATTERN = re.compile(r"[|/]")
 
@@ -53,6 +54,11 @@ def preprocess_clinvar(
 ) -> dict[str, int | dict[str, int]]:
     allowed_review = {normalize_token(value) for value in allowed_review_statuses}
     allowed_chromosome_set = set(allowed_chromosomes)
+
+    # Imported here rather than at module scope so the pure helpers in this
+    # module (label mapping, region split, k-merization) can be imported and
+    # tested without the heavy pysam C-extension installed.
+    import pysam
 
     variant_file = pysam.VariantFile(str(clinvar_vcf_path))
     reference = pysam.FastaFile(str(reference_fasta_path))
