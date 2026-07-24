@@ -1,3 +1,9 @@
+"""Binary-classification metrics and diagnostic plots.
+
+Shared by the baseline and CNN training paths. Metric functions degrade
+gracefully to ``nan`` on single-class inputs so a run never crashes just
+because a split happens to contain one class.
+"""
 from __future__ import annotations
 
 from pathlib import Path
@@ -23,6 +29,13 @@ from .utils import ensure_directory
 
 
 def compute_binary_metrics(y_true: np.ndarray, y_score: np.ndarray, threshold: float = 0.5) -> dict[str, float]:
+    """Compute the standard binary metrics for one split.
+
+    Threshold-free ranking metrics (AUROC, average precision) sit alongside
+    threshold-dependent ones (F1, precision, recall) and the Brier score.
+    AUROC and average precision fall back to ``nan`` when only one class is
+    present, rather than raising.
+    """
     y_pred = (y_score >= threshold).astype(int)
 
     metrics = {
@@ -47,6 +60,12 @@ def compute_binary_metrics(y_true: np.ndarray, y_score: np.ndarray, threshold: f
 
 
 def select_best_f1_threshold(y_true: np.ndarray, y_score: np.ndarray) -> float:
+    """Return the score threshold that maximizes F1 on the given data.
+
+    Intended to be called on the validation split so the selected threshold is
+    not tuned on the test set. Falls back to ``0.5`` for degenerate inputs
+    (empty, single-class, or no candidate thresholds).
+    """
     if y_true.size == 0 or np.unique(y_true).size < 2:
         return 0.5
 
@@ -60,6 +79,11 @@ def select_best_f1_threshold(y_true: np.ndarray, y_score: np.ndarray) -> float:
 
 
 def save_classification_plots(y_true: np.ndarray, y_score: np.ndarray, output_dir: str | Path, prefix: str) -> None:
+    """Write ROC, precision-recall, and calibration plots to ``output_dir``.
+
+    Files are named ``{prefix}_roc.png``, ``{prefix}_pr.png``, and
+    ``{prefix}_calibration.png``.
+    """
     destination = ensure_directory(output_dir)
 
     _save_roc_curve(y_true, y_score, destination / f"{prefix}_roc.png")

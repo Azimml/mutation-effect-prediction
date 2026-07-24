@@ -1,3 +1,10 @@
+"""k-mer TF-IDF + logistic-regression baseline.
+
+Reference and alternate windows are turned into overlapping k-mer "words",
+joined into a single document per variant with an ``[ALT]`` separator, then
+scored with a linear model. It is deliberately simple: its job is to give the
+CNN a defensible reference point under the leakage-aware split.
+"""
 from __future__ import annotations
 
 import pickle
@@ -20,6 +27,12 @@ def train_baseline_model(
     max_iter: int,
     class_weight: str | None,
 ) -> dict[str, dict[str, float]]:
+    """Train the baseline and write the model, metrics, and plots.
+
+    Fits the TF-IDF vectorizer on the training split only, then evaluates on
+    train/val/test. Returns the per-split metrics and also persists them to
+    ``metrics.json`` alongside the pickled model and diagnostic plots.
+    """
     dataframe = read_dataset_csv(dataset_path)
     train_frame = dataframe[dataframe["split"] == "train"].reset_index(drop=True)
     val_frame = dataframe[dataframe["split"] == "val"].reset_index(drop=True)
@@ -71,6 +84,12 @@ def predict_with_baseline(
     input_csv_path: str | Path,
     output_csv_path: str | Path,
 ) -> Path:
+    """Score a CSV of sequence windows with a saved baseline model.
+
+    The input must contain ``ref_seq`` and ``alt_seq``. Writes the original
+    rows plus ``predicted_probability`` and ``predicted_label`` (at a 0.5
+    threshold) to ``output_csv_path`` and returns that path.
+    """
     with Path(model_path).open("rb") as handle:
         payload = pickle.load(handle)
 
@@ -100,6 +119,11 @@ def build_text_features(dataframe: pd.DataFrame, kmer_size: int) -> list[str]:
 
 
 def sequence_to_kmers(sequence: str, kmer_size: int) -> list[str]:
+    """Split a sequence into overlapping k-mers.
+
+    Returns one k-mer per starting offset (a stride-1 sliding window). A
+    sequence shorter than ``kmer_size`` is returned unchanged as a single token.
+    """
     if len(sequence) < kmer_size:
         return [sequence]
 
