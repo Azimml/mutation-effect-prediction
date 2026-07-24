@@ -11,7 +11,7 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader, Dataset
 
-from .dataframe_io import read_dataset_csv
+from .dataframe_io import read_dataset_csv, require_columns
 from .evaluation import (
     compute_binary_metrics,
     save_classification_plots,
@@ -262,6 +262,7 @@ def predict_with_cnn(
     device_preference: str = "auto",
 ) -> Path:
     dataframe = read_dataset_csv(input_csv_path)
+    require_columns(dataframe, ("ref_seq", "alt_seq"), input_csv_path)
     dataset = SequencePairDataset(dataframe.assign(label=0))
 
     device = resolve_device(device_preference)

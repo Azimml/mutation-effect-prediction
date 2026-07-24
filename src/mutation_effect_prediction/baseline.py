@@ -7,7 +7,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 
-from .dataframe_io import read_dataset_csv
+from .dataframe_io import read_dataset_csv, require_columns
 from .evaluation import compute_binary_metrics, save_classification_plots
 from .utils import ensure_directory, write_json
 
@@ -75,6 +75,7 @@ def predict_with_baseline(
         payload = pickle.load(handle)
 
     dataframe = read_dataset_csv(input_csv_path)
+    require_columns(dataframe, ("ref_seq", "alt_seq"), input_csv_path)
     texts = build_text_features(dataframe, payload["kmer_size"])
     matrix = payload["vectorizer"].transform(texts)
     scores = payload["classifier"].predict_proba(matrix)[:, 1]
