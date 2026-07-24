@@ -33,6 +33,7 @@ dependencies = [
 
 [project.optional-dependencies]
 cnn = ["torch>=2.3"]
+dev = ["pytest>=7.4", "ruff>=0.4"]
 
 [project.scripts]
 mep = "mutation_effect_prediction.cli:main"
@@ -44,3 +45,22 @@ Issues = "https://github.com/Azimml/mutation-effect-prediction/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra -q"
+
+[tool.ruff]
+# Generous width: several f-string log lines and dense model/CLI signatures
+# read more clearly unwrapped than folded.
+line-length = 130
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+# matplotlib.use("Agg") must run before pyplot import (E402);
+# importorskip before the package import in tests is intentional (E402).
+"src/mutation_effect_prediction/evaluation.py" = ["E402"]
+"tests/*" = ["E402"]
