@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 
+from . import __version__
 from .config import load_config
 from .utils import decompress_gzip, download_file, ensure_directory
 
@@ -14,6 +15,11 @@ def main() -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Mutation effect prediction pipeline.")
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     download_parser = subparsers.add_parser("download-data", help="Download ClinVar and reference FASTA.")
