@@ -1,0 +1,46 @@
+name: Bug report
+description: Report a reproducible problem in the pipeline.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Please avoid attaching real ClinVar or FASTA
+        data files. A minimal synthetic example (see `scripts/run_smoke_test.py`)
+        is usually enough to reproduce an issue.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you run, and what went wrong?
+      placeholder: e.g. `mep preprocess` raised a reference-mismatch error on every record.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: The exact command(s) and config used.
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Package version / commit
+      description: Output of `mep --version`, or the commit SHA.
+    validations:
+      required: false
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python version, and whether torch/pysam are installed.
+    validations:
+      required: false
