@@ -94,7 +94,7 @@ def build_text_features(dataframe: pd.DataFrame, kmer_size: int) -> list[str]:
         " ".join(sequence_to_kmers(ref_seq, kmer_size))
         + " [ALT] "
         + " ".join(sequence_to_kmers(alt_seq, kmer_size))
-        for ref_seq, alt_seq in zip(dataframe["ref_seq"], dataframe["alt_seq"])
+        for ref_seq, alt_seq in zip(dataframe["ref_seq"], dataframe["alt_seq"], strict=True)
     ]
 
 

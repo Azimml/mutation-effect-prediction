@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
 
 from .config import load_config
 from .utils import decompress_gzip, download_file, ensure_directory
